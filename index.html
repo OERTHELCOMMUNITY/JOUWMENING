@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OERTHEL — Jouw eerlijke mening</title>
+<meta name="description" content="Je dronk een OERTHEL testblik. Vertel ons eerlijk wat je ervan vindt.">
+<meta name="theme-color" content="#f5f5f0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--black:#f5f5f0;--dark:#e8e8e2;--white:#080808;--off:#3a3a36;--muted:#6b6b64;--red:#c8281e;--ease:cubic-bezier(.16,1,.3,1)}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--black);color:var(--white);font-family:'Manrope',system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")}
+.brand{position:fixed;top:0;left:0;right:0;z-index:40;text-align:center;padding:calc(20px + env(safe-area-inset-top)) 0 20px;
+  font-weight:800;font-size:15px;letter-spacing:.35em;text-indent:.35em;background:linear-gradient(to bottom,rgba(245,245,240,.95),transparent)}
+
+/* hero */
+.stage{min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;padding:96px 24px;position:relative}
+.hero h1{font-weight:800;line-height:.95;letter-spacing:-.04em;text-transform:uppercase;font-size:clamp(44px,15vw,130px)}
+.hero h1 span{display:block}
+.hero .ch{display:inline-block;opacity:0;transform:translateY(.4em);animation:ch .9s var(--ease) forwards}
+@keyframes ch{to{opacity:1;transform:none}}
+.hero .small{font-size:clamp(26px,9vw,80px);font-weight:300;letter-spacing:-.02em;color:var(--muted);margin-bottom:.2em}
+.hero p.sub{margin:28px auto 0;max-width:30ch;font-size:clamp(15px,4vw,19px);font-weight:300;line-height:1.6;color:var(--off);opacity:0;animation:fade 1s 1.8s forwards}
+.scroll-line{position:absolute;bottom:calc(32px + env(safe-area-inset-bottom));left:50%;width:1px;height:56px;background:linear-gradient(var(--white),transparent);opacity:0;animation:fade 1s 2.2s forwards}
+@keyframes fade{to{opacity:.7}}
+
+/* review */
+.review{padding:40px 20px 40px;max-width:640px;margin:0 auto}
+.note{text-align:center;max-width:34ch;margin:0 auto 56px}
+.note h2{font-size:clamp(30px,9vw,52px);font-weight:800;letter-spacing:-.035em;line-height:1.05;margin-bottom:24px}
+.note p{font-size:clamp(15px,4vw,18px);font-weight:300;line-height:1.65;color:var(--off)}
+.note p+p{margin-top:16px}
+.note b{font-weight:600;color:var(--white)}
+.step-title{text-align:center;font-size:clamp(22px,6vw,32px);font-weight:800;letter-spacing:-.03em;margin:56px 0 8px}
+.step-sub{text-align:center;font-size:15px;font-weight:300;color:var(--off);margin-bottom:24px}
+
+/* rating scale */
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.scale button{aspect-ratio:1;background:none;border:1px solid rgba(8,8,8,.18);border-radius:50%;color:inherit;font:inherit;font-weight:800;font-size:clamp(18px,5vw,24px);cursor:pointer;transition:border-color .3s,background .3s,color .3s}
+.scale button:hover{border-color:rgba(8,8,8,.6)}
+.scale button[aria-pressed="true"]{background:var(--white);color:var(--black);border-color:var(--white)}
+.step-title+.scale{margin-top:16px}
+.scale-ends{display:flex;justify-content:space-between;margin-top:12px;font-size:13px;color:var(--muted)}
+.choices{display:grid;gap:8px}
+.choices button{background:none;border:1px solid rgba(8,8,8,.18);border-radius:999px;color:inherit;font:inherit;font-weight:600;font-size:15px;padding:16px;cursor:pointer;transition:border-color .3s,background .3s,color .3s}
+.choices button:hover{border-color:rgba(8,8,8,.6)}
+.choices button[aria-pressed="true"]{background:var(--white);color:var(--black);border-color:var(--white)}
+
+/* form */
+form{margin-top:8px}
+.field{margin-bottom:26px}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px}
+label i{font-style:normal;opacity:.7}
+textarea,input[type=text]{width:100%;background:transparent;border:0;border-bottom:1px solid rgba(8,8,8,.25);color:var(--white);
+  font:inherit;font-size:16px;padding:10px 0;border-radius:0;transition:border-color .3s;resize:none;line-height:1.55}
+input:focus,textarea:focus{border-color:var(--white);outline:none}
+.scale button:focus-visible,.choices button:focus-visible,button.go:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--white);outline-offset:4px}
+button.go{width:100%;background:transparent;color:var(--white);border:1px solid var(--white);font:inherit;font-weight:800;font-size:15px;letter-spacing:.12em;text-transform:uppercase;padding:20px;cursor:pointer;transition:background .3s,color .3s;margin-top:8px}
+button.go:hover{background:var(--white);color:var(--black)}
+button.go:disabled{opacity:.5}
+.err{color:#c8281e;font-size:14px;margin-top:16px;min-height:1.2em}
+.hp{position:absolute;left:-9999px}
+
+.done{display:none;text-align:center;padding:48px 0;animation:fadeIn .6s var(--ease)}
+.done .icon{width:64px;height:64px;border:2px solid #27ae60;border-radius:50%;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;background:rgba(39,174,96,.08)}
+.done .icon svg{width:26px;height:26px;stroke:#27ae60;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.done h2{font-size:clamp(24px,7vw,34px);font-weight:800;letter-spacing:-.03em;margin-bottom:14px}
+.done p{color:var(--off);font-weight:300;line-height:1.7;max-width:420px;margin:0 auto}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.sent form{display:none}.sent .done{display:block}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:72px 24px calc(40px + env(safe-area-inset-bottom))}
+
+@media (prefers-reduced-motion:reduce){.nudge{animation:none!important}.hero .ch{animation:none;opacity:1;transform:none}.hero p.sub,.scroll-line{animation:none;opacity:.7}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="brand">OERTHEL</div>
+
+<main>
+  <section class="stage hero" aria-label="Welkom">
+    <div>
+      <h1 id="welcome">
+        <span class="small">Jouw eerlijke</span>
+        <span>Mening</span>
+      </h1>
+      <p class="sub">Je dronk een testblik van OERTHEL. Vertel ons wat je er van vindt.</p>
+    </div>
+    <div class="scroll-line"></div>
+  </section>
+
+  <section class="review" id="review">
+    <div class="note">
+      <p>Het duurt twee minuten.</p>
+    </div>
+
+    <div id="wrap">
+      <form id="form" novalidate>
+        <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <h2 class="step-title">Welk cijfer geef je het?</h2>
+        <div class="scale" id="scale" role="group" aria-label="Cijfer van 1 tot 10"></div>
+        <div class="scale-ends"><span>Niet goed</span><span>Heel goed</span></div>
+
+        <h2 class="step-title">Zou je het kopen?</h2>
+        <p class="step-sub">Als het in de winkel ligt.</p>
+        <div class="choices" id="buy" role="group" aria-label="Zou je het kopen?">
+          <button type="button" data-value="Ja" aria-pressed="false">Ja</button>
+          <button type="button" data-value="Misschien" aria-pressed="false">Misschien</button>
+          <button type="button" data-value="Nee" aria-pressed="false">Nee</button>
+        </div>
+
+        <h2 class="step-title">Vertel het in je eigen woorden</h2>
+        <p class="step-sub">Smaak, bitterheid, zoetheid, nasmaak, prijs, verpakking.</p>
+        <div class="field"><label for="goed">Wat vond je goed?</label><textarea id="goed" name="goed" rows="3"></textarea></div>
+        <div class="field"><label for="beter">Wat kan beter?</label><textarea id="beter" name="beter" rows="3"></textarea></div>
+        <div class="field"><label for="overig">Nog iets dat we moeten weten? <i>(optioneel)</i></label><textarea id="overig" name="overig" rows="2"></textarea></div>
+
+        <button class="go" type="submit">Review versturen</button>
+        <p class="err" id="err" role="alert"></p>
+      </form>
+
+      <div class="done" id="done">
+        <div class="icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+        <h2>Bedankt voor je eerlijkheid.</h2>
+        <p>Je review is binnen. We lezen elke reactie en gebruiken jouw mening om OERTHEL beter te maken.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>OERTHEL · Less ingredients, more focus.</footer>
+
+<script>
+// Letters one by one
+document.querySelectorAll('#welcome span').forEach(function(el,si){
+  var t=el.textContent;el.textContent='';
+  t.split('').forEach(function(c,i){
+    var s=document.createElement('span');s.className='ch';s.textContent=c===' '?'\u00a0':c;
+    s.style.animationDelay=(si*0.5+i*0.07+0.2)+'s';el.appendChild(s);
+  });
+});
+
+var score='',buy='';
+
+// Optioneel: review.html?blik=black of ?blik=white wordt stil meegestuurd (niet zichtbaar voor de bezoeker)
+var q=(new URLSearchParams(location.search).get('blik')||'').toLowerCase();
+var can={black:'OERTHEL BLACK SYSTEM01',white:'OERTHEL WHITE SYSTEM02'}[q]||'';
+
+// Cijfer 1-10
+var scale=document.getElementById('scale');
+for(var i=1;i<=10;i++){(function(n){
+  var b=document.createElement('button');b.type='button';b.textContent=n;b.setAttribute('aria-pressed','false');b.setAttribute('aria-label','Cijfer '+n);
+  b.addEventListener('click',function(){scale.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});score=String(n)});
+  scale.appendChild(b);
+})(i)}
+
+// Kopen ja/nee
+var buyEl=document.getElementById('buy');
+buyEl.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){
+  buyEl.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});buy=b.dataset.value;
+})});
+
+function nudge(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.remove('nudge');void el.offsetWidth;el.classList.add('nudge')}
+
+// Versturen — Formspree-formulier voor reviews
+var ENDPOINT='https://formspree.io/f/xbgdjnyk';
+document.getElementById('form').addEventListener('submit',function(e){
+  e.preventDefault();
+  var f=e.target,err=document.getElementById('err');err.textContent='';
+  if(f.website.value)return;
+  if(!score){err.textContent='Geef eerst een cijfer.';nudge(scale);return}
+  if(!buy){err.textContent='Geef aan of je het zou kopen.';nudge(buyEl);return}
+  if(!f.goed.value.trim()&&!f.beter.value.trim()){err.textContent='Vertel ons in elk geval wat goed was of wat beter kan.';return}
+  var btn=f.querySelector('button.go');btn.disabled=true;btn.textContent='Versturen…';
+  var data=new FormData(f);data.delete('website');
+  data.append('type','review');if(can)data.append('product',can);data.append('cijfer',score);data.append('zou_kopen',buy);
+  fetch(ENDPOINT,{method:'POST',body:data,headers:{Accept:'application/json'}})
+    .then(function(r){if(!r.ok)throw 0;var w=document.getElementById('wrap');w.classList.add('sent');window.scrollTo({top:w.getBoundingClientRect().top+scrollY-140,behavior:'smooth'})})
+    .catch(function(){err.textContent='Versturen mislukt. Probeer het opnieuw.';btn.disabled=false;btn.textContent='Review versturen'});
+});
+</script>
+</body>
+</html>
